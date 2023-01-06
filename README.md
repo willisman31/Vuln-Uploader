@@ -8,5 +8,9 @@ This is a very young project and I plan to put a low but steady stream of effort
 
 ## License
 
-Project uses an MIT license- do as you wish with it.
+Project uses an MIT license- do as you wish with it
+
+## Credit
+
+Default wordlist comes from [danielmiessler](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/directory-list-2.3-medium.txt)
 
