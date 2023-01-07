@@ -15,7 +15,8 @@ def readWordlist(wordlist=DEFAULT_WORDLIST):
     word_array = []
     file=open(wordlist, "r")
     for line in file:
-        word_array.append(line)
+	if line[0] != "#" and len(line) >= 1:
+        	word_array.append(line)
     file.close()
 
 
