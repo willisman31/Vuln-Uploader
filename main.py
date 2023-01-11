@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import requests
+import requests, json
 
 DEFAULT_WORDLIST = "./default_wordlist.txt"
 
@@ -22,5 +22,11 @@ def readWordlist(wordlist=DEFAULT_WORDLIST):
             word_array.append(line)
     file.close()
     return word_array
+
+def scanHeader(target):
+    request = requests.get(target)
+    head = json(request.headers)
+    return head['Server']
+
 
 
