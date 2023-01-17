@@ -4,7 +4,7 @@ import requests, json
 
 DEFAULT_WORDLIST = "./default_wordlist.txt"
 
-def enumerateDirectories(target, wordlist = DEFAULT_WORDLIST):
+def enumerateDirectoriesByRequest(target, wordlist = DEFAULT_WORDLIST):
     word_array=readWordlist(wordlist)
     discovered_directories=[];
     for word in word_array:
@@ -13,6 +13,22 @@ def enumerateDirectories(target, wordlist = DEFAULT_WORDLIST):
             print(word + " " + request.status_code)
             discovered_directories.append(word)
     return discovered_directories
+
+def enumerateDirectoriesWithSourceCode(target):
+    response = requests.get(target)
+    text = response.text
+    split_text = text.split('"')
+    discovered_directories=[]
+    for item in split_text:
+        if target in item:
+            discovered_directories.append(item)
+    return discovered_directories
+
+def searchForAbsolutePath(target):
+    pass
+
+def searchForRelativePath(target):
+    pass
 
 def readWordlist(wordlist=DEFAULT_WORDLIST):
     word_array = []
@@ -27,6 +43,5 @@ def scanHeader(target):
     request = requests.get(target)
     head = json(request.headers)
     return head['Server']
-
 
 
