@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 
-import requests
+import requests, sys
 
 DEFAULT_WORDLIST = "./default_wordlist.txt"
 
-def main():
+def main() -> None:
     pass
 
-def enumerateDirectoriesByRequest(target, wordlist = DEFAULT_WORDLIST):
+def enumerateDirectoriesByRequest(target, wordlist = DEFAULT_WORDLIST) -> list[str]:
     word_array=readWordlist(wordlist)
     discovered_directories=[];
     for word in word_array:
@@ -17,13 +17,20 @@ def enumerateDirectoriesByRequest(target, wordlist = DEFAULT_WORDLIST):
             discovered_directories.append(word)
     return discovered_directories
 
-def enumerateDirectoriesWithSourceCode(target):
+def cleanTarget(target) -> str:
+    if len(target.split("://")) < 2:
+        target = "https://" + target
+    if target[-1] == "/":
+        target = target[:-1]
+    return target
+
+def enumerateDirectoriesWithSourceCode(target) -> list[str]:
     response = requests.get(target)
     source_code = response.text
     discovered_directories= searchForAbsolutePath(target, source_code) + searchForRelativePath(source_code)
     return discovered_directories
 
-def searchForAbsolutePath(target, raw_source_code):
+def searchForAbsolutePath(target, raw_source_code) -> list[str]:
     split_source_code = raw_source_code.split('"')
     discovered_directories=[]
     for item in split_source_code:
@@ -31,7 +38,7 @@ def searchForAbsolutePath(target, raw_source_code):
             discovered_directories.append(item)
     return discovered_directories
 
-def searchForRelativePath(raw_source_code):
+def searchForRelativePath(raw_source_code) -> list[str]:
     split_source_code = raw_source_code.split('"')
     discovered_directories=[]
     for item in split_source_code:
@@ -39,7 +46,7 @@ def searchForRelativePath(raw_source_code):
             discovered_directories.append(item)
     return discovered_directories
 
-def readWordlist(wordlist=DEFAULT_WORDLIST):
+def readWordlist(wordlist=DEFAULT_WORDLIST) -> list[str]:
     word_array = []
     file=open(wordlist, "r")
     for line in file:
@@ -48,7 +55,7 @@ def readWordlist(wordlist=DEFAULT_WORDLIST):
     file.close()
     return word_array
 
-def scanHeader(target):
+def scanHeader(target) -> str:
     request = requests.get(target)
     head = request.headers
     return head['server']
