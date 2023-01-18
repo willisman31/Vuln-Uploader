@@ -16,19 +16,25 @@ def enumerateDirectoriesByRequest(target, wordlist = DEFAULT_WORDLIST):
 
 def enumerateDirectoriesWithSourceCode(target):
     response = requests.get(target)
-    text = response.text
-    split_text = text.split('"')
+    source_code = response.text
+    discovered_directories= searchForAbsolutePath(target, source_code) + searchForRelativePath(source_code)
+    return discovered_directories
+
+def searchForAbsolutePath(target, raw_source_code):
+    split_source_code = raw_source_code.split('"')
     discovered_directories=[]
-    for item in split_text:
+    for item in split_source_code:
         if target in item:
             discovered_directories.append(item)
     return discovered_directories
 
-def searchForAbsolutePath(target):
-    pass
-
-def searchForRelativePath(target):
-    pass
+def searchForRelativePath(raw_source_code):
+    split_source_code = raw_source_code.split('"')
+    discovered_directories=[]
+    for item in split_source_code:
+        if "./" in item or "../" in item:
+            discovered_directories.append(item)
+    return discovered_directories
 
 def readWordlist(wordlist=DEFAULT_WORDLIST):
     word_array = []
