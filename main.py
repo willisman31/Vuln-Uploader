@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 
-import requests, json
+import requests
 
 DEFAULT_WORDLIST = "./default_wordlist.txt"
+
+def main():
+    pass
 
 def enumerateDirectoriesByRequest(target, wordlist = DEFAULT_WORDLIST):
     word_array=readWordlist(wordlist)
@@ -47,7 +50,9 @@ def readWordlist(wordlist=DEFAULT_WORDLIST):
 
 def scanHeader(target):
     request = requests.get(target)
-    head = json(request.headers)
-    return head['Server']
+    head = request.headers
+    return head['server']
 
+if __name__=="__main__":
+    main()
 
