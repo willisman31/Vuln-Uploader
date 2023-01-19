@@ -9,20 +9,29 @@ def main() -> None:
 
 def enumerateDirectoriesByRequest(target, wordlist = DEFAULT_WORDLIST) -> list[str]:
     word_array=readWordlist(wordlist)
-    discovered_directories=[];
+    discovered_directories=[]
+    target = cleanTarget(target)
     for word in word_array:
-        request = requests.get(target + "/" + word)
+        request = requests.get(target + word)
         if int(request.status_code) >= 200 and int(request.status_code) < 400:
             print(word + " " + request.status_code)
             discovered_directories.append(word)
     return discovered_directories
 
 def cleanTarget(target) -> str:
+    top_level_domains = ["com", "org", "gov", "edu", "net", "int", "it", "tv", "mil", "co", "uk", "aws"]
     if len(target.split("://")) < 2:
-        target = "https://" + target
-    if target[-1] == "/":
-        target = target[:-1]
+        target = "https://" + target # make sure that a protocol is declared 
+    if target.split(".")[-1].replace("/", "") not in top_level_domains:
+        target=cutPath(target)
+        # trim the resource path if it exists
+    elif target[-1] != "/":
+        target = target + "/" # make sure the target URL ends with / so that requests can be made
     return target
+
+def cutPath(target) -> str:
+    val = target[8:].find("/")
+    return target[:val+8]
 
 def enumerateDirectoriesWithSourceCode(target) -> list[str]:
     response = requests.get(target)
