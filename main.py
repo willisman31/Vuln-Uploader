@@ -61,6 +61,18 @@ def enumerateDirectoriesWithSourceCode(target) -> list[str]:
     discovered_directories= searchForAbsolutePath(target, source_code) + searchForRelativePath(source_code)
     return discovered_directories
 
+# Recursively enumerate source code for directory paths; this definitely needs to be refactored heavily
+def deeplyEnumerateDirectoriesWithSourceCode(target, directories=None, fullEnum=None) -> set(str):
+    response=requests.get(target)
+    source_code = response.text
+    directories+= searchForAbsolutePath(target, source_code) + searchForRelativePath(source_code)
+    for element in directories:
+        fullEnum.add(element)
+    directories = directories.pop()
+    if len(directories) > 0:
+        deeplyEnumerateDirectoriesWithSourceCode(target + directories[0], directories, fullEnum)
+    return fullEnum
+
 # search for a full address including domain
 def searchForAbsolutePath(target, raw_source_code) -> list[str]:
     split_source_code = raw_source_code.split('"')
