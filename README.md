@@ -10,6 +10,10 @@ TODO
 
 - TODO
 
+### Using Custom Payloads
+
+- TODO
+
 ## How to Contribute
 
 This is a very young project and I plan to put a low but steady stream of effort into upgrading it over time.  If there is functionality you would like to be included please open a pull request, open an issue, or send me a message- no wrong answers here.  
@@ -22,3 +26,6 @@ Project uses an MIT license- do as you wish with it
 
 Default wordlist comes from [danielmiessler](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/directory-list-2.3-medium.txt)
 
+### Payloads
+
+PHP reverse shell comes from [pentestmonkey](https://github.com/pentestmonkey/php-reverse-shell/blob/master/php-reverse-shell.php)
