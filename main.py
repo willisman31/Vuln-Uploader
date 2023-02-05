@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
-import requests, sys
+import requests, sys, subprocess, threading
 
 DEFAULT_WORDLIST = "./default_wordlist.txt"
 
 def main() -> None:
-    print(trimPath(sys.argv[1]))
+    shellInteract()
 
 # Search for visible directories using brute force HTTP requests
 def enumerateDirectoriesByRequest(target, wordlist = DEFAULT_WORDLIST) -> list[str]:
@@ -104,6 +104,28 @@ def scanHeader(target) -> str:
     request = requests.get(target)
     head = request.headers
     return head['server']
+
+# send commands to shell
+def shellInteract() -> None:
+    p = subprocess.Popen(["bash"], stderr=subprocess.PIPE,shell=False, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+    exit = False
+    
+    def read_stdout():
+        while not exit:
+            msg = p.stdout.readline()
+            print("stdout: ", msg.decode())
+
+    def read_stderro():
+        while not exit:
+            msg = p.stderr.readline()
+            print("stderr: ", msg.decode())
+
+    threading.Thread(target=read_stdout).start()
+    threading.Thread(target=read_stderro).start()
+    while not exit:
+        res = input(">")
+        p.stdin.write((res + '\n').encode())
+        p.stdin.flush()
 
 if __name__=="__main__":
     main()
