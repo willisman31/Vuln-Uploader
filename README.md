@@ -2,6 +2,8 @@
 
 Automated tool for testing upload vulnerabilities; this tool currently has only basic enumeration functionality, the ultimate goal is to create script that can test for any non-complex upload vulnerabilities using only the target URL as input.  Partly due to the selected payloads and partly to prevent unnecessary complexity, this project is designed for use on Linux hosts only.
 
+A brief explanation of upload vulnerabilities can be found [here](https://blog.jacob-willis.com/learning/upload-vulnerabilities.html)
+
 ## Usage
 
 TODO
